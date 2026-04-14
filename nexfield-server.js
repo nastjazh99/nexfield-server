@@ -139,9 +139,9 @@ async function triggerVapiCall({ orderId, clientName, clientPhone, clientAddress
   phoneNumberId: VAPI_PHONE_ID,
   customer: { number: clientPhone, name: clientName },
   assistantId: process.env.VAPI_ASSISTANT_ID,
-}, { headers: { Authorization: `Bearer ${VAPI_API_KEY}`, 'Content-Type': 'application/json' } });return { callId: response.data?.id };
+  }, { headers: { Authorization: `Bearer ${VAPI_API_KEY}`, 'Content-Type': 'application/json' } });
+  return { callId: response.data?.id };
   } catch (err) {
-    console.error('VAPI error:', err.response?.data?.message || err.message);
     return { callId: null };
   }
 }
