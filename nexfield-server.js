@@ -136,10 +136,10 @@ async function triggerVapiCall({ orderId, clientName, clientPhone, clientAddress
   const systemPrompt = `You are a friendly scheduling assistant for ${COMPANY_NAME}. A customer named ${clientName} just requested ${serviceType || 'appliance repair'} service. 1. Confirm their request. 2. Ask best time for a visit. 3. Confirm address: ${clientAddress || 'not provided'}. 4. Be brief under 2 minutes. 5. End by saying technician will call to confirm. Order #${orderId}`;
   try {
     const response = await axios.post('https://api.vapi.ai/call/phone', {
-      phoneNumberId: VAPI_PHONE_ID,
-      customer: { number: clientPhone, name: clientName },
-     assistantId: process.env.VAPI_ASSISTANT_ID,
-    return { callId: response.data?.id };
+  phoneNumberId: VAPI_PHONE_ID,
+  customer: { number: clientPhone, name: clientName },
+  assistantId: process.env.VAPI_ASSISTANT_ID,
+}, { headers: { Authorization: `Bearer ${VAPI_API_KEY}`, 'Content-Type': 'application/json' } });
   } catch (err) {
     console.error('VAPI error:', err.response?.data?.message || err.message);
     return { callId: null };
