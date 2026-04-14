@@ -138,8 +138,7 @@ async function triggerVapiCall({ orderId, clientName, clientPhone, clientAddress
     const response = await axios.post('https://api.vapi.ai/call/phone', {
       phoneNumberId: VAPI_PHONE_ID,
       customer: { number: clientPhone, name: clientName },
-      assistant: { model: { provider: 'openai', model: 'gpt-4o-mini', messages: [{ role: 'system', content: systemPrompt }] }, voice: { provider: 'playht', voiceId: 'jennifer' }, firstMessage: `Hi ${clientName.split(' ')[0]}! This is ${COMPANY_NAME} calling about your service request. Is this a good time?`, endCallMessage: 'Thank you! Our technician will be in touch. Have a great day!', maxDurationSeconds: 180 },
-    }, { headers: { Authorization: `Bearer ${VAPI_API_KEY}`, 'Content-Type': 'application/json' } });
+     assistantId: process.env.VAPI_ASSISTANT_ID,
     return { callId: response.data?.id };
   } catch (err) {
     console.error('VAPI error:', err.response?.data?.message || err.message);
