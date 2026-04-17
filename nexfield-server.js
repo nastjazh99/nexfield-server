@@ -8,6 +8,8 @@ const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');
 const webpush = require('web-push');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 app.use(express.json());
@@ -21,7 +23,7 @@ app.use((req, res, next) => {
 });
 
 const {
-  VAPI_API_KEY, VAPI_PHONE_ID, VAPI_ASSISTANT_ID,
+  VAPI_API_KEY, VAPI_PHONE_ID, VAPI_ASSISTANT_ID, RESEND_API_KEY,
   SUPABASE_URL, SUPABASE_KEY,
   WEBHOOK_SECRET,
   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY,
@@ -86,6 +88,12 @@ app.post('/webhook/lead', authMiddleware, async (req, res) => {
       .select().single();
 
     if (dbError) return res.status(500).json({ error: 'Database error', details: dbError.message });
+    await resend.emails.send({
+  from: 'onboarding@resend.dev',
+  to: 'nastjazh99@gmail.com',
+  subject: '🔔 Новый лид NUR HVAC!',
+  html: `<h2>Новый лид!</h2><p><b>Имя:</b> ${customer_name}</p><p><b>Телефон:</b> ${customer_phone}</p><p><b>Адрес:</b> ${customer_address}</p><p><b>Услуга:</b> ${service_type}</p>`
+});
 
     await sendPush('🔔 New Lead!', `${customer_name} · ${service_type || 'Service'} · ${customer_phone}`, { order_id: order.id, type: 'new_lead' });
 
