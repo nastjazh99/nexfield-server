@@ -155,7 +155,7 @@ if (!VAPI_API_KEY || !VAPI_PHONE_ID) return { callId: null };
     console.log('VAPI error:', err.response?.data || err.message);
     return { callId: null };
 }
-  }
 }
+
 
 app.listen(PORT, () => console.log(`🚀 NexField Pro running on port ${PORT}`));
