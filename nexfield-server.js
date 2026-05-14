@@ -151,8 +151,10 @@ if (!VAPI_API_KEY || !VAPI_PHONE_ID) return { callId: null };
   customer: { number: clientPhone, name: clientName },
 }, { headers: { Authorization: `Bearer ${VAPI_API_KEY}`, 'Content-Type': 'application/json' } });
     return { callId: response.data?.id };
-  } catch (err) {
+ } catch (err) {
+    console.log('VAPI error:', err.response?.data || err.message);
     return { callId: null };
+}
   }
 }
 
