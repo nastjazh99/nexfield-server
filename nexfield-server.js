@@ -79,12 +79,13 @@ async function sendPush(title, body, data = {}) {
 
 app.post('/webhook/lead', authMiddleware, async (req, res) => {
   const { customer_name, customer_phone, customer_address, service_type, source = 'webhook' } = req.body;
-  if (!customer_name || !customer_phone) return res.status(400).json({ error: 'customer_name and customer_phone are required' });
+  const finalName = customer_name || 'Unknown';
+const finalPhone = customer_phone || '';
 
   try {
     const { data: order, error: dbError } = await supabase
       .from('orders')
-      .insert([{ client_name: customer_name, client_phone: customer_phone, client_address: customer_address || '', service_type: service_type || 'General Service', source, status: 'New', progress: 'Assigned' }])
+      .insert([{ client_name: finalName, client_phone: finalPhone, client_address: customer_address || '', service_type: service_type || 'General Service', source: source, status: 'new' }])
       .select().single();
 
     if (dbError) return res.status(500).json({ error: 'Database error', details: dbError.message });
